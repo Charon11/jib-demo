@@ -36,7 +36,7 @@ Commençons par la configuration Maven pour le plugin Jib
 
 et ... ben c'est fini, il n'y a rien d'autre à faire, tout est prêt pour créer notre container.
 
-Dans notre cas, nous allons build le container sans Docker.  
+Dans notre cas, nous allons générer le container sans Docker.  
 ```bash
 mvn jib:build
 ```
@@ -53,7 +53,7 @@ mvn jib:dockerBuild
 ```
 Votre container est du coup upload dans la registry locale.
  
- Oui mais maintenant, il est temps de faire tourner tout ça.
+Oui mais maintenant, il est temps de faire tourner tout ça.
 
  ## Cloud Run
 
@@ -64,18 +64,18 @@ Votre container est du coup upload dans la registry locale.
 
 Si on prend en compte que vous avez déjà un projet dans la GCP, vous pouvez accédez au service Cloud Run via la barre de recherche de la console Google Cloud Platform
 
-![Find Cloud Run](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/GotoCloudRun.png)
+![Find Cloud Run](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/GotoCloudRun.png)
 
-Il faut ensuite activé le service Cloud Run: 
+Il faut ensuite activer le service Cloud Run: 
 
-![Activate Cloud Run](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunActivateService.png)
+![Activate Cloud Run](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunActivateService.png)
 
 
-![Cloud Run Service](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunService.png)
+![Cloud Run Service](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunService.png)
 
 Vous allez ensuite devoir activer Api Registry:
 
-![Cloud Run Registry](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunActivateRegistry.png)
+![Cloud Run Registry](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunActivateRegistry.png)
 
 
 Et enfin pour terminer, il faut installer le Google Cloud SDK en suivant la documentation suivante [Google Cloud SDK](https://cloud.google.com/sdk/docs), puis configurer [gcloud comme Docker credential helper](https://cloud.google.com/container-registry/docs/advanced-authentication#gcloud-helper)
@@ -100,42 +100,41 @@ Nous allons commencer par faire une petite modification dans la configuration de
 </plugin>
 ```
 
-Maintenant si vous relancez la commande
+Maintenant si vous relancez la commande de build vous devriez build et push votre image sur la registry GCloud.
 ```bash
 mvn jib:build
 ...
 [INFO] Built and pushed image as gcr.io/cloud-run-jib/jib-demo, gcr.io/cloud-run-jib/jib-demo:0.0.1-SNAPSHOT
 ...
 ```
-vous devriez build et push votre image sur la registry GCloud.
 
-![Cloud Run Registry Container](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunRegistryContainer.png)
+![Cloud Run Registry Container](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunRegistryContainer.png)
 
-![Cloud Run Registry Container Version](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunRegistryContainerVersion.png)
+![Cloud Run Registry Container Version](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunRegistryContainerVersion.png)
 
 
 Une fois que notre container est dans le registry, il est temps de le faire tourner dans Cloud Run, pour cela retournez dans le service Cloud Run et cliquez sur Créer un service
-![Cloud Run Service](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunService.png) 
+![Cloud Run Service](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunService.png) 
 
 
-Choisissez votre région, le nom de votre service et autoriser les appels non authentifiés:
-![Cloud Run Create Service](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunCreateService.png) 
+Choisissez votre région, le nom de votre service et autorisez les appels non authentifiés:
+![Cloud Run Create Service](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunCreateService.png) 
 
 
-Selectionnez ensuite votre container précédemment uploadé et cliquez sur Créer
-![Cloud Run Create Service Container](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunCreateServiceContainer.png) 
+Selectionnez ensuite votre container précédemment upload et cliquez sur Créer
+![Cloud Run Create Service Container](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunCreateServiceContainer.png) 
 
 Une fois le service créé, vous avez une url disponible pour y accéder 
-![Cloud Run Create Service Created](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunCreateServiceCreated.png) 
+![Cloud Run Create Service Created](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunCreateServiceCreated.png) 
 
-Et voila, vous avez votre container qui tourne sur le Cloud:
+Et voila, vous avez votre container qui tourne sur le Cloud, sans avoir à manipuler ni Docker ni Kubernetes ni tout autres technologies liées aux containers.
 
-![Cloud Run Service Started](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudRunStarted.png) 
+![Cloud Run Service Started](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudRunStarted.png) 
 
 
 ## Fusion
 
-![Fusion](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/fusion.png)
+![Fusion](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/fusion.png)
 
 
 Nous venons de voir que Jib et Cloud Run fonctionnent bien independamment, on va maintenant voir qu'ils peuvent également travailer ensemble et automatiquement.
@@ -143,7 +142,7 @@ Nous venons de voir que Jib et Cloud Run fonctionnent bien independamment, on va
 
 Il va d'abord falloir ajouter application [Google Cloud Build](https://github.com/marketplace/google-cloud-build) à votre compte Github. Ensuite il faut donner accès à cette application à votre repository:
 
-![Github Apps](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/GitHubApp-GoogleCloudBuild.png)
+![Github Apps](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/GitHubApp-GoogleCloudBuild.png)
 
 Une fois l'application activée sur votre repos, nous allons ajouter le fichier de configuration que va utiliser Cloud Build dans le dossier .cloudbuild/cloudbuild-jib-maven.yaml
 ```yaml
@@ -218,30 +217,30 @@ Et petite subtilité, on va commenter "image" et "credHelper" dans la config Mav
 
 On retourne ensuite dans la console de la GCP pour activer Cloud Build
 
-![Cloud Build API](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildApi.png)
+![Cloud Build API](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildApi.png)
 
-![Cloud Build](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuild.png)
+![Cloud Build](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuild.png)
 
 On va ensuite connecter notre repos à Cloud Build
 
-![Cloud Build Connect Step 1](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildConnect-1.png)
+![Cloud Build Connect Step 1](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildConnect-1.png)
 
-![Cloud Build Connect Step 2](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildConnect-2.png)
+![Cloud Build Connect Step 2](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildConnect-2.png)
 
 Et on skip la création d'un déclencheur, que l'on va faire juste après
 
-![Cloud Build Connected](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildConnected.png)
+![Cloud Build Connected](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildConnected.png)
 
 Maintenant nous allons créer un déclencheur
 
-![Cloud Build Trigger](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildTrigger.png)
+![Cloud Build Trigger](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildTrigger.png)
 
-![Cloud Build Trigger Added](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildTriggerAdded.png)
+![Cloud Build Trigger Added](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildTriggerAdded.png)
 
 Une fois ajouté, on peut tester notre déclencheur en cliquant sur "Exécuter le déclencheur"
 
-![Cloud Build Trigger Success](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildSuccess.png)
+![Cloud Build Trigger Success](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildSuccess.png)
 
-![Cloud Build Trigger History](https://raw.githubusercontent.com/Charon11/jib-cloud-run/master/resources/CloudBuildHist.png)
+![Cloud Build Trigger History](https://raw.githubusercontent.com/Charon11/jib-demo/master/doc/CloudBuildHist.png)
 
 Il ne reste plus qu'à tester votre déclencheur en faisant un push sur votre repos github, et vérifier que le build a réussi.
