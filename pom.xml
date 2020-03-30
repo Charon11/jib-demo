@@ -49,8 +49,8 @@
 				<version>2.1.0</version>
 				<configuration>
 					<to>
-						<image>gcr.io/cloud-run-jib/jib-demo</image>
-						<!--<credHelper>gcloud</credHelper>-->
+						<!--<<image>gcr.io/cloud-run-jib/jib-demo</image>
+						credHelper>gcloud</credHelper>-->
 						<tags>${project.version}</tags>
 					</to>
 				</configuration>
